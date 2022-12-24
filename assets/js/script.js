@@ -1,3 +1,18 @@
+// GIVEN I am using a daily planner to create a schedule
+// WHEN I open the planner
+// THEN the current day is displayed at the top of the calendar
+// WHEN I scroll down
+// THEN I am presented with time blocks for standard business hours
+// WHEN I view the time blocks for that day
+// THEN each time block is color-coded to indicate whether it is in the past, present, or future
+// WHEN I click into a time block
+// THEN I can enter an event
+// WHEN I click the save button for that time block
+// THEN the text for that event is saved in local storage
+// WHEN I refresh the page
+// THEN the saved events persist
+
+
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
@@ -18,6 +33,36 @@ $(function () {
   // TODO: Add code to get any user input that was saved in localStorage and set
   // the values of the corresponding textarea elements. HINT: How can the id
   // attribute of each time-block be used to do this?
-  //
-  // TODO: Add code to display the current date in the header of the page.
+
+  // Add code to display the current date in the header of the page.
+
+  // Convert cardinal number (e.g. 1, 2, 3, 4) to an ordinal number (1st, 2nd, 3rd, 4th)
+  function ordinal(n) {
+    var s = ["th", "st", "nd", "rd"];
+    var v = n%100;
+    return n + (s[(v-20)%10] || s[v] || s[0]);
+  }
+
+  // Map weekday indices to weekday names
+  const DAYS = {
+    0: "Sunday",
+    1: "Monday",
+    2: "Tuesday",
+    3: "Wednesday",
+    4: "Thursday",
+    5: "Friday",
+    6: "Saturday",
+  }
+
+  // Get current day information
+  var today = dayjs();
+  var weekdayIndex = today.day(); // Gets day as a number - 0 (Sunday) to 6 (Saturday)
+  var weekdayName = DAYS[weekdayIndex]; // Changes day number to day name
+  var month = today.format("MMMM");
+  var dayOfMonth = today.format("D");
+  var ordinalDayOfMonth = ordinal(dayOfMonth);
+
+  // Add day information to HTML document
+  var dateString = weekdayName + ", " + month + " " + ordinalDayOfMonth
+  $('#currentDay').text(dateString);
 });
